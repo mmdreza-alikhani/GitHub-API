@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 
 function errorResponse($code, $message = 'Error'): JsonResponse
@@ -29,5 +30,10 @@ function successResponse($data,$code,$message = null): JsonResponse
         'data' => $data
 
     ], $code);
+
+}
+
+function syncData($username): JsonResponse
+{
 
 }
