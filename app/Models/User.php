@@ -52,4 +52,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function scopeUser($query, $user): void
+    {
+        $query->where('user_id', $user->id);
+    }
 }
