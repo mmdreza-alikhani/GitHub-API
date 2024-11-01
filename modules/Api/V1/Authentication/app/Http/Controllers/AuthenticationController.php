@@ -38,7 +38,7 @@ class AuthenticationController extends Controller
 
         $token = $user->createToken('myApp')->plainTextToken;
 
-        $syncData = syncData($user->username);
+        syncData($user->username);
 
         return successResponse([
             'data' => new AuthenticationResource($user),
