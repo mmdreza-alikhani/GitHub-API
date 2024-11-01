@@ -68,4 +68,23 @@ class RepositoryController extends Controller
         syncData($user->username);
         return successResponse([], 200, 'اطلاعات آپدیت شد.');
     }
+
+    /**
+     * @throws ConnectionException
+     */
+    public function search(): JsonResponse
+    {
+        syncData(auth()->user()->username);
+        $keyword = request()->keyword;
+        if (request()->has('keyword') && trim($keyword) != ''){
+            $repositories = Repository::where('name', 'LIKE', '%'.trim($keyword).'%')->where('user_id', auth()->id())->latest()->paginate(10);
+        }else{
+            $repositories = Repository::where('user_id', auth()->id())->latest()->paginate(10);
+        }
+        return successResponse([
+            'data' => RepositoryResource::collection($repositories->load('tags')),
+            'links' => RepositoryResource::collection($repositories)->response()->getData()->links,
+            'meta' => RepositoryResource::collection($repositories)->response()->getData()->meta
+        ], 200, 'ریپوزیتوری ها با موفقیت دریافت شد.');
+    }
 }

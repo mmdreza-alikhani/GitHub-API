@@ -3,10 +3,13 @@
 namespace Modules\Api\V1\Tag\app\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Repository;
 use App\Models\Tag;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Modules\Api\V1\Repository\app\Http\Resources\RepositoryResource;
 use Modules\Api\V1\Tag\app\Http\Resources\TagResource;
 
 class TagController extends Controller
@@ -80,5 +83,24 @@ class TagController extends Controller
         $tag->delete();
 
         return successResponse(new TagResource($tag), 200, 'تگ مورد نظر با موفقیت حذف شد!');
+    }
+
+    /**
+     * @throws ConnectionException
+     */
+    public function search(): JsonResponse
+    {
+        syncData(auth()->user()->username);
+        $keyword = request()->keyword;
+        if (request()->has('keyword') && trim($keyword) != ''){
+            $tags = Tag::where('title', 'LIKE', '%'.trim($keyword).'%')->latest()->paginate(10);
+        }else{
+            $tags = Tag::latest()->paginate(10);
+        }
+        return successResponse([
+            'data' => TagResource::collection($tags->load('repositories')),
+            'links' => TagResource::collection($tags)->response()->getData()->links,
+            'meta' => TagResource::collection($tags)->response()->getData()->meta
+        ], 200, 'تگ ها با موفقیت دریافت شد.');
     }
 }
