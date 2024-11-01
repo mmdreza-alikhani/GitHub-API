@@ -103,4 +103,15 @@ class TagController extends Controller
             'meta' => TagResource::collection($tags)->response()->getData()->meta
         ], 200, 'تگ ها با موفقیت دریافت شد.');
     }
+
+    public function repositories(Tag $tag): JsonResponse
+    {
+//        syncData(auth()->user()->username);
+        $repositories = $tag->repositories()->latest()->paginate(10);
+        return successResponse([
+            'data' => RepositoryResource::collection($repositories),
+            'links' => RepositoryResource::collection($repositories)->response()->getData()->links,
+            'meta' => RepositoryResource::collection($repositories)->response()->getData()->meta
+        ], 200, 'ریپوزیتوری ها با موفقیت دریافت شد.');
+    }
 }

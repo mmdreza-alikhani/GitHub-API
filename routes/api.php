@@ -24,6 +24,7 @@ Route::prefix('v1/')->name('v1.')->group(function () {
     // START: TAGS
         Route::apiResource('tags', TagController::class)->middleware('auth:sanctum');
         Route::get('tagsSearch', [TagController::class , 'search'])->name('tags.search')->middleware('auth:sanctum');
+        Route::get('tags/{tag}/repositories', [TagController::class , 'repositories'])->name('tags.repositories');
     // END: TAGS
 
     // START: REPOSITORIES
