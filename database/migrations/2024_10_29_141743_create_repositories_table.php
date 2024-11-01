@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('language');
             $table->string('url');
             $table->text('description');
-            $table->softDeletes();
             $table->timestamps();
         });
     }

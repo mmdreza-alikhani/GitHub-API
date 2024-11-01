@@ -16,9 +16,9 @@ class TagController extends Controller
      */
     public function index(): JsonResponse
     {
-        $tags = Tag::latest()->paginate(2);
+        $tags = Tag::latest()->paginate(10);
         return successResponse([
-            'data' => TagResource::collection($tags),
+            'data' => TagResource::collection($tags->load('repositories')),
             'links' => TagResource::collection($tags)->response()->getData()->links,
             'meta' => TagResource::collection($tags)->response()->getData()->meta
         ], 200, 'تگ ها با موفقیت دریافت شد.');

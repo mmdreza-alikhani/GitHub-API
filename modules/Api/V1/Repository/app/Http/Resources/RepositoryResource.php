@@ -27,6 +27,7 @@ class RepositoryResource extends JsonResource
             'language' => $this->language,
             'url' => $this->url,
             'description' => $this->description,
+            'tags' => $this->whenLoaded('tags'),
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
             'updated_at' => $this->updated_at->format('Y-m-d H:i:s')
         ];

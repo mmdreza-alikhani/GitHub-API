@@ -16,12 +16,14 @@ class RepositoryController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * @throws ConnectionException
      */
     public function index(): JsonResponse
     {
+        syncData(auth()->user()->username);
         $repositories = Repository::where('user_id', auth()->id())->with('tags')->latest()->paginate(10);
         return successResponse([
-            'data' => RepositoryResource::collection($repositories),
+            'data' => RepositoryResource::collection($repositories->load('tags')),
             'links' => RepositoryResource::collection($repositories)->response()->getData()->links,
             'meta' => RepositoryResource::collection($repositories)->response()->getData()->meta
         ], 200, 'ریپوزیتوری ها با موفقیت دریافت شد.');
@@ -35,7 +37,7 @@ class RepositoryController extends Controller
         return successResponse(new RepositoryResource($repository), 200, 'ریپوزیتوری با موفقیت دریافت شد.');
     }
 
-    #[NoReturn] public function update(Repository $repository, Request $request): JsonResponse
+    public function update(Repository $repository, Request $request): JsonResponse
     {
         $user = auth()->user();
         if ($repository->user_id == $user->id){
@@ -49,10 +51,21 @@ class RepositoryController extends Controller
      * Remove the specified resource from storage.
      * @throws ConnectionException
      */
-    public function removeStar(Repository $repository): JsonResponse
+    public function unstar(Repository $repository): JsonResponse
     {
         $user = auth()->user();
-        $unstarRepo = Http::dd()->withToken($user->token)->get('https://api.github.com/user/starred/' . $repository->name);
-        return successResponse(new RepositoryResource($repository), 200, 'ریپوزیتوری با موفقیت حذف شد.');
+        Http::withToken($user->token)->delete('https://api.github.com/user/starred/' . $repository->name);
+        syncData($user->username);
+        return successResponse([], 200, 'ریپوزیتوری با موفقیت حذف شد.');
+    }
+
+    /**
+     * @throws ConnectionException
+     */
+    public function syncData(): JsonResponse
+    {
+        $user = auth()->user();
+        syncData($user->username);
+        return successResponse([], 200, 'اطلاعات آپدیت شد.');
     }
 }

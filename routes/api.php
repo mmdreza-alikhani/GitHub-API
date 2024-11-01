@@ -11,9 +11,10 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::prefix('v1/')->name('v1.')->group(function () {
+    Route::post('syncData', [RepositoryController::class, 'syncData'])->middleware('auth:sanctum');
     Route::apiResource('tags', TagController::class)->middleware('auth:sanctum');
     Route::apiResource('repositories', RepositoryController::class)->middleware('auth:sanctum');
-    Route::delete('repositories/{repository}', [RepositoryController::class, 'removeStar'])->middleware('auth:sanctum');
+    Route::post('repositories/{repository}/unstar', [RepositoryController::class, 'unstar'])->middleware('auth:sanctum');
     Route::post('register' , [AuthenticationController::class , 'register']);
     Route::post('login' , [AuthenticationController::class , 'login']);
     Route::post('logout' , [AuthenticationController::class , 'logout'])->middleware('auth:sanctum');

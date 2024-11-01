@@ -46,6 +46,9 @@ class AuthenticationController extends Controller
         ], 200, 'حساب کاربری با موفقیت ایجاد شد.');
     }
 
+    /**
+     * @throws ConnectionException
+     */
     public function login(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
@@ -69,7 +72,7 @@ class AuthenticationController extends Controller
 
         $token = $user->createToken('myApp')->plainTextToken;
 
-        $syncData = syncData($user->username);
+        syncData($user->username);
 
         return successResponse([
             'data' => new AuthenticationResource($user),
