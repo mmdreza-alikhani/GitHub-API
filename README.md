@@ -18,7 +18,7 @@ This is a Laravel API project for Github. Authenticated user can manage all his 
 3. Install a LocalServer (especially Laragon):
     https://laragon.org/download/
 
-4. Run the migrations and seed the database:
+4. Run the migrations:
     ```sh
     php artisan migrate
     ```
