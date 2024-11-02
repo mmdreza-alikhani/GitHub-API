@@ -18,12 +18,14 @@ This is a Laravel API project for Github. Authenticated user can manage all his 
 3. Install a LocalServer (especially Laragon):
     https://laragon.org/download/
 
-4. Run the migrations:
+4. Rename .env.example file into .env
+
+5. Run the migrations:
     ```sh
     php artisan migrate
     ```
 
-5. Start the development server:
+6. Start the development server:
     ```sh
     php artisan serve
     ```
