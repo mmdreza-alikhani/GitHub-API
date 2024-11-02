@@ -22,6 +22,7 @@ class AuthenticationController extends Controller
             'username' => 'required|string|unique:users,username',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string',
+            'token' => 'required|string',
             'password_confirmation' => 'required|same:password',
         ]);
 
