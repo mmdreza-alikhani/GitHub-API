@@ -6,7 +6,7 @@ This is a Laravel API project for Github. Authenticated user can manage all his 
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/your-username/your-repo-name.git
+    git clone https://github.com/MmdReza-Alikhani/GitHub-API.git
     cd your-repo-name
     
 
